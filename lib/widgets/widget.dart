@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget appBarMain(BuildContext context) {
   return AppBar(
-    backgroundColor: Color.fromARGB(219, 168, 122, 201),
+    // backgroundColor: Color.fromARGB(219, 168, 122, 201),
     title: Image.asset(
       "assets/images/chat_nova1.png",
       height: 50,
@@ -13,34 +13,39 @@ Widget appBarMain(BuildContext context) {
   );
 }
 
-InputDecoration textFieldInputDecoration(String _hintText) {
+InputDecoration textFieldInputDecoration(String _hintText,) {
   return InputDecoration(
-      hintText: _hintText,
-      hintStyle: TextStyle(
-        color: Colors.white54,
+    
+    hintText: _hintText,
+    hintStyle: TextStyle(
+      color: Colors.black45,
+    ),
+    focusedBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.black,
       ),
-      focusedBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white54,
-        ),
+    ),
+    enabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.black45,
       ),
-      enabledBorder: UnderlineInputBorder(
-        borderSide: BorderSide(
-          color: Colors.white54,
-        ),
-      ));
+    ),
+    disabledBorder: UnderlineInputBorder(
+      borderSide: BorderSide(color: Colors.red),
+    ),
+  );
 }
 
 TextStyle simpleTextStyle() {
   return TextStyle(
-    color: Colors.white,
+    color: Colors.black,
     fontSize: 16,
   );
 }
 
 TextStyle mediumTextStyle() {
   return TextStyle(
-    color: Colors.white,
+    color: Colors.black,
     fontSize: 18,
   );
 }

@@ -4,8 +4,9 @@ import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/Database.dart';
 import 'package:chat_app/services/auth.dart';
 import 'package:chat_app/view/conversation_screen.dart';
+import 'package:chat_app/services/google_sign_up.dart';
 import 'package:chat_app/view/search.dart';
-import 'package:chat_app/view/sign_In_page.dart';
+
 import 'package:chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +54,7 @@ class _ChatRoomState extends State<ChatRoom> {
   getUserInfo() async {
     Constants.myName = await HelperFunctions.getUserNameSharedPreference();
     _databaseMethods.getChatRooms(Constants.myName!).then((value) {
+      print("your value is ************* $value");
       setState(() {
         chatRoomsStream = value;
       });
@@ -66,13 +68,13 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          "assets/images/logo.png",
+          "assets/images/chat_nova1.png",
           height: 50,
         ),
         actions: [
           GestureDetector(
             onTap: () {
-              _authMethods.signOut();
+              GoogleSignInProvider().logout();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -119,8 +121,8 @@ class ChatRoomTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ConversationScreeen(chatRoomId: chatRoomId)),
+              builder: (context) => ConversationScreeen(
+                  username: userName, chatRoomId: chatRoomId)),
         );
       },
       child: Container(
@@ -133,7 +135,7 @@ class ChatRoomTile extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              color: Colors.tealAccent,
+              color: Colors.orange.shade800,
               width: 1,
             ),
           ),
@@ -146,7 +148,7 @@ class ChatRoomTile extends StatelessWidget {
               width: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.orange,
                 borderRadius: BorderRadius.circular(40),
               ),
               child: Text(

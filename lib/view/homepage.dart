@@ -1,5 +1,6 @@
 import 'package:chat_app/view/account_details.dart';
-import 'package:chat_app/view/sign_UP_page.dart';
+import 'package:chat_app/view/chatRoomScreen.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class HomePage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return AccountDetails();
+          return ChatRoom();
         } else if (snapshot.hasError) {
           return Center(child: Text("Something went Wrong"));
         } else {

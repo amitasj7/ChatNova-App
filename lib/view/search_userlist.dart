@@ -167,6 +167,11 @@ class _SearchScreenState extends State<SearchScreen> {
                         Expanded(
                           child: TextField(
                             controller: _searchController,
+                            onChanged: (value){  
+                              setState(() {
+                                
+                              });
+                            },
                             style: TextStyle(
                               color: Colors.black,
                             ),
@@ -177,33 +182,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            initiateSearch();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(
-                              15,
-                            ),
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              gradient: RadialGradient(colors: [
-                                const Color(0x36FFFFFF),
-                                const Color(0x0FFFFFFF),
-                              ]),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Image.asset(
-                              'assets/images/search_white.png',
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
+                      
                       ],
                     ),
                   ),
-                  searchList(),
+                  
                 ],
               ),
             ),

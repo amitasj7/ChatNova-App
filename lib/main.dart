@@ -1,11 +1,12 @@
+import 'package:chat_app/Model/provider.dart';
 import 'package:chat_app/helper/authenticate.dart';
 import 'package:chat_app/helper/helperfunction.dart';
+import 'package:chat_app/services/google_sign_up.dart';
 import 'package:chat_app/view/account_details.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
-import 'package:chat_app/view/google_sign_up.dart';
+
 import 'package:chat_app/view/homepage.dart';
-import 'package:chat_app/view/sign_In_page.dart';
-import 'package:chat_app/view/sign_UP_page.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +36,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  getLoggedInState() async {
+  Future<void> getLoggedInState() async {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
+      print("your value ********************* $value");
       setState(() {
         userIsLoggedIn = value;
       });
@@ -45,9 +47,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => GoogleSignInProvider(),
-      child: MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => GoogleSignInProvider(),
+        ),
+        ChangeNotifierProvider(create: (context) => passwordshow()),
+      ],
+      child: Builder(builder: (BuildContext context) {
+        return MaterialApp(
           title: 'ChatNova',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
@@ -61,10 +69,10 @@ class _MyAppState extends State<MyApp> {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             fontFamily: 'overpass',
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.orange,
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            scaffoldBackgroundColor: Color(0xff1F1F1F),
-            primaryColor: Color(0xff145C9E),
+            scaffoldBackgroundColor: Color.fromARGB(255, 237, 180, 99),
+            primaryColor: Color.fromARGB(255, 253, 182, 96),
           ),
           home: (userIsLoggedIn != null)
               ? userIsLoggedIn!
@@ -72,7 +80,10 @@ class _MyAppState extends State<MyApp> {
                   : Authenticate()
               : Container(
                   child: Center(child: Authenticate()),
-                )),
+                ),
+         
+        );
+      }),
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'package:chat_app/helper/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
   getUserbyUsername(String username) async {
+    print("in getuserbyusername");
     return await FirebaseFirestore.instance
         .collection("users")
         .where("name", isEqualTo: username)
@@ -19,8 +21,13 @@ class DatabaseMethods {
     });
   }
 
-  uploadUserInfo(userMap) {
+  uploadUserInfo(userMap, context) {
     FirebaseFirestore.instance.collection("users").add(userMap).catchError((e) {
+      openSnackBar(
+        context,
+        e.toString(),
+        Color.fromARGB(255, 255, 210, 150),
+      );
       print(e.toString());
     });
   }
@@ -55,10 +62,10 @@ class DatabaseMethods {
         .snapshots();
   }
 
-  getChatRooms(String useName) async {
+  getChatRooms(String userName) async {
     return await FirebaseFirestore.instance
         .collection("ChatRoom")
-        .where("users", arrayContains: useName)
+        .where("users", arrayContains: userName)
         .snapshots();
   }
 }

@@ -39,7 +39,8 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   shared_preferences:
-  google_sign_in:
+  google_sign_in: ^6.1.4
+  simple_animations:
   #  Google Icon
   font_awesome_flutter:
   get:

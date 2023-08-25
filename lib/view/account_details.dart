@@ -2,7 +2,7 @@ import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/Database.dart';
 import 'package:chat_app/services/auth.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
-import 'package:chat_app/view/google_sign_up.dart';
+import 'package:chat_app/services/google_sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,7 @@ class _AccountDetailsState extends State<AccountDetails> {
     //
     // });
 
-    _databaseMethods.uploadUserInfo(userInfoMap);
+    _databaseMethods.uploadUserInfo(userInfoMap,context);
     HelperFunctions.saveUserLoggedInSharedPreference(true);
     Navigator.push(
       context,
@@ -52,6 +52,7 @@ class _AccountDetailsState extends State<AccountDetails> {
   @override
   Widget build(BuildContext context) {
     final _user = FirebaseAuth.instance.currentUser;
+
     // _user again and again update hoga
 
     return Scaffold(
