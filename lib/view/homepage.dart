@@ -1,4 +1,3 @@
-import 'package:chat_app/view/account_details.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,13 +15,13 @@ class HomePage extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return ChatRoom();
+          return const ChatRoom();
         } else if (snapshot.hasError) {
-          return Center(child: Text("Something went Wrong"));
+          return const Center(child: Text("Something went Wrong"));
         } else {
-          return Authenticate();
+          return const Authenticate();
         }
       },
     ));

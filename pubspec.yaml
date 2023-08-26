@@ -40,12 +40,15 @@ dependencies:
   cloud_firestore:
   shared_preferences:
   google_sign_in: ^6.1.4
-  simple_animations:
+  
+  image_picker: ^1.0.2
+  firebase_storage: ^11.2.6
   #  Google Icon
   font_awesome_flutter:
   get:
   # State Management
   provider:
+  shimmer:
 
 dev_dependencies:
   flutter_test:

@@ -13,20 +13,20 @@ void openSnackBar(context, snackMessage, color) {
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.orange.shade400,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(15), topRight: Radius.circular(15)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.error, size: 30),
+          const Icon(Icons.error, size: 30),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
-            child: Container(
+            child: SizedBox(
               // color: Colors.red,
               width: MediaQuery.of(context).size.width * 0.7,
               child: Text(snackMessage,
-                  style: TextStyle(fontSize: 15, color: Colors.black),
+                  style: const TextStyle(fontSize: 15, color: Colors.black),
                   maxLines: 3,
                   overflow: TextOverflow.fade),
             ),

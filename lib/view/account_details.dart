@@ -1,11 +1,11 @@
+import 'package:chat_app/helper/authenticate.dart';
 import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/Database.dart';
-import 'package:chat_app/services/auth.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
 import 'package:chat_app/services/google_sign_up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 
 class AccountDetails extends StatefulWidget {
   const AccountDetails({super.key});
@@ -15,8 +15,7 @@ class AccountDetails extends StatefulWidget {
 }
 
 class _AccountDetailsState extends State<AccountDetails> {
-  DatabaseMethods _databaseMethods = DatabaseMethods();
-  AuthMethods _authMethods = AuthMethods();
+  final DatabaseMethods _databaseMethods = DatabaseMethods();
 
   signMeUP() {
     final _user1 = FirebaseAuth.instance.currentUser;
@@ -39,7 +38,7 @@ class _AccountDetailsState extends State<AccountDetails> {
     //
     // });
 
-    _databaseMethods.uploadUserInfo(userInfoMap,context);
+    _databaseMethods.uploadUserInfo(userInfoMap, context);
     HelperFunctions.saveUserLoggedInSharedPreference(true);
     Navigator.push(
       context,
@@ -57,18 +56,22 @@ class _AccountDetailsState extends State<AccountDetails> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Account Detail"),
+          title: const Text("Account Detail"),
           centerTitle: true,
           actions: [
             TextButton(
-              child: Text(
+              child: const Text(
                 'Logout',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                final _provider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                _provider.logout();
+                GoogleSignInProvider().logout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Authenticate(),
+                  ),
+                );
               },
             )
           ],
@@ -79,14 +82,14 @@ class _AccountDetailsState extends State<AccountDetails> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "Profile",
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               GestureDetector(
@@ -98,22 +101,22 @@ class _AccountDetailsState extends State<AccountDetails> {
                   backgroundImage: NetworkImage(_user!.photoURL!),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
-                "Name :  " + _user.displayName!,
-                style: TextStyle(
+                "Name :  ${_user.displayName!}",
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
-                "Email :  " + _user.email!,
-                style: TextStyle(
+                "Email :  ${_user.email!}",
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                 ),

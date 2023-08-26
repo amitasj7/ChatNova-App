@@ -1,13 +1,11 @@
-import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/helper/snackbar.dart';
-import 'package:chat_app/services/auth.dart';
+
 import 'package:chat_app/view/account_details.dart';
-import 'package:chat_app/view/chatRoomScreen.dart';
-import 'package:chat_app/view/homepage.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:chat_app/services/Database.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
@@ -35,16 +33,16 @@ class GoogleSignInProvider extends ChangeNotifier {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => AccountDetails(),
+          builder: (context) => const AccountDetails(),
         ),
       );
     } catch (e) {
       openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     }
 
     notifyListeners();
@@ -72,13 +70,13 @@ class GoogleSignInProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.clear();
-    print(
-        "Hello World bhai ${await HelperFunctions.getUserLoggedInSharedPreference()}");
+    // print(
+    //     "Hello World bhai ${await HelperFunctions.getUserLoggedInSharedPreference()}");
 
-    print("hello world 2");
+    // print("hello world 2");
     // firebase se signout
     FirebaseAuth.instance.signOut();
-    print("hello world 3");
+    // print("hello world 3");
     // google sign se disconnect
     await _googleSignIn.disconnect();
   }

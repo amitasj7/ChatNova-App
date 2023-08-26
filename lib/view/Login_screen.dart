@@ -1,11 +1,10 @@
 import 'package:chat_app/Model/provider.dart';
 import 'package:chat_app/helper/helperfunction.dart';
+import 'package:chat_app/helper/snackbar.dart';
 import 'package:chat_app/services/Database.dart';
 import 'package:chat_app/services/auth.dart';
-import 'package:chat_app/view/account_details.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
 import 'package:chat_app/view/forget_password_screen.dart';
-import 'package:chat_app/widgets/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +13,7 @@ import 'package:provider/provider.dart';
 class LoginScreen extends StatefulWidget {
   final Function? toggle;
 
-  LoginScreen({required this.toggle});
+  const LoginScreen({super.key, required this.toggle});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -24,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
 
-  AuthMethods _authMethods = AuthMethods();
-  DatabaseMethods _databaseMethods = DatabaseMethods();
+  final AuthMethods _authMethods = AuthMethods();
+  final DatabaseMethods _databaseMethods = DatabaseMethods();
 
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -36,37 +35,51 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = true;
       });
-      HelperFunctions.saveUserEmailSharedPreference(
-          emailController.text.toString());
+      try {
+        HelperFunctions.saveUserEmailSharedPreference(
+            emailController.text.toString());
 
-      _authMethods
-          .signInWithEmailAndPassword(
-              emailController.text.toString(), passController.text.toString(),context)
-          .then((value) async {
-        if (value != null) {
-          userInfoSnapshot =
-              await _databaseMethods.getUserbyUserEmail(emailController.text);
+        _authMethods
+            .signInWithEmailAndPassword(emailController.text.toString(),
+                passController.text.toString(), context)
+            .then((value) async {
+          if (value != null) {
+            userInfoSnapshot =
+                await _databaseMethods.getUserbyUserEmail(emailController.text);
 
-          HelperFunctions.saveUserLoggedInSharedPreference(true);
-          HelperFunctions.saveUserNameSharedPreference(
-              userInfoSnapshot!.docs[0]["name"]);
+            HelperFunctions.saveUserLoggedInSharedPreference(true);
+            HelperFunctions.saveUserNameSharedPreference(
+                userInfoSnapshot!.docs[0]["name"]);
 
-          HelperFunctions.saveUserEmailSharedPreference(
-              userInfoSnapshot!.docs[0]["email"]);
-          Navigator.pushReplacement(
+            HelperFunctions.saveUserEmailSharedPreference(
+                userInfoSnapshot!.docs[0]["email"]);
+            // ignore: use_build_context_synchronously
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChatRoom(),
+              ),
+            );
+          } else {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        }).catchError((e) {
+          openSnackBar(
             context,
-            MaterialPageRoute(
-              builder: (context) => ChatRoom(),
-            ),
+            e.toString(),
+            const Color.fromARGB(255, 255, 210, 150),
           );
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-        }
-      }).catchError((e) {
-        print("Incorrect information , please fill again");
-      });
+          // print("Incorrect information , please fill again");
+        });
+      } catch (e) {
+        openSnackBar(
+          context,
+          e.toString(),
+          const Color.fromARGB(255, 255, 210, 150),
+        );
+      }
     }
   }
 
@@ -74,11 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? Container(
-              child: const Center(
-                child: CircularProgressIndicator(color: Colors.orange),
-              ),
-            )
+          ? const Center(
+            child: CircularProgressIndicator(color: Colors.orange),
+          )
           : Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -93,14 +104,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  Container(
+                  SizedBox(
                     // color: Colors.teal,
                     width: MediaQuery.of(context).size.width * 0.30,
 
                     child: Image.asset("assets/images/chatnova_black.png"),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
                         Text(
@@ -116,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   Expanded(
                     child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white54,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(60),
@@ -139,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         // color: Colors.teal,
                                         color: Colors.white54,
                                         borderRadius: BorderRadius.circular(12),
-                                        boxShadow: [
+                                        boxShadow: const [
                                           BoxShadow(
                                             color:
                                                 Color.fromRGBO(225, 95, 27, 3),
@@ -152,22 +163,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Column(
                                         children: [
                                           Container(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   vertical: 10),
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                   border: Border(
                                                       bottom: BorderSide(
-                                                          color: Colors
-                                                              .white54))),
+                                                          color:
+                                                              Colors.white54))),
                                               child: TextFormField(
-                                              onChanged: (value){  
-                                                
-                                              },
+                                                onChanged: (value) {},
                                                 controller: emailController,
                                                 cursorColor:
                                                     Colors.orange.shade900,
                                                 decoration: InputDecoration(
-                                                  prefixIcon: Container(
+                                                  prefixIcon: SizedBox(
                                                       height: 5,
                                                       width: 5,
                                                       // color: Colors.red,
@@ -178,22 +187,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                                         color: Colors
                                                             .orange.shade700,
                                                       ))),
-                                                  suffixText: (emailController.text.length==0) ? "@gmail.com  ": "",
+                                                  suffixText: (emailController
+                                                              .text.isEmpty)
+                                                      ? "@gmail.com  "
+                                                      : "",
                                                   hintText: "Email",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                       color: Colors.grey),
                                                   border: InputBorder.none,
                                                 ),
                                                 //  textAlign: TextAlign.center,
                                               )),
                                           Container(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 10),
-                                            decoration: BoxDecoration(
+                                            decoration: const BoxDecoration(
                                                 border: Border(
                                                     bottom: BorderSide(
-                                                        color: Colors
-                                                           .white54))),
+                                                        color:
+                                                            Colors.white54))),
                                             child: Consumer<passwordshow>(
                                                 builder:
                                                     (context, value, child) {
@@ -210,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 cursorColor:
                                                     Colors.orange.shade900,
                                                 decoration: InputDecoration(
-                                                  suffixIcon: Container(
+                                                  suffixIcon: SizedBox(
                                                     width: 8,
                                                     // height: 2,
                                                     // color: Colors.teal,
@@ -236,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  prefixIcon: Container(
+                                                  prefixIcon: SizedBox(
                                                       height: 5,
                                                       width: 5,
                                                       // color: Colors.red,
@@ -247,7 +259,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                             .orange.shade700,
                                                       ))),
                                                   hintText: "Password",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                       color: Colors.grey),
                                                   border: InputBorder.none,
                                                 ),
@@ -259,23 +271,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ],
                                       ),
                                     )),
-                                SizedBox(height: 30),
-                                Text("Forgot Password?",
-                                    style:
-                                        TextStyle(color: Colors.grey.shade700)),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 30),
                                 GestureDetector(
-                                  onTap: ()=> signIn(),
+                                  onTap: () {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return const ForgetPasswordScreen();
+                                    }));
+                                  },
+                                  child: const Text("Forgot Password?",
+                                      style: TextStyle(color: Colors.black87)),
+                                ),
+                                const SizedBox(height: 20),
+                                GestureDetector(
+                                  onTap: () => signIn(),
                                   child: Container(
                                     height: 50,
-                                    margin: EdgeInsets.symmetric(
+                                    margin: const EdgeInsets.symmetric(
                                       horizontal: 50,
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(50),
                                       color: Colors.orange.shade900,
                                     ),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         "Login",
                                         style: TextStyle(
@@ -287,7 +306,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 SizedBox(
-                                  height: MediaQuery.of(context).size.height*0.2,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
                                 ),
                                 GestureDetector(
                                   onTap: () => widget.toggle!(),

@@ -13,51 +13,54 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  var _searchController = TextEditingController();
-  DatabaseMethods _databaseMethods = DatabaseMethods();
+  final _searchController = TextEditingController();
+  final DatabaseMethods _databaseMethods = DatabaseMethods();
 
   late QuerySnapshot _searchResultSnapshot;
   bool isLoading = false;
   bool haveUserSearched = false;
 
   initiateSearch() async {
-    if (_searchController.text.isNotEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-    }
+    // if (_searchController.text.isNotEmpty) {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    // }
 
     await _databaseMethods
         .getUserbyUsername(_searchController.text.toString())
         .then((value) {
-      print("hello baby");
+      // print("hello baby");
       _searchResultSnapshot = value;
-      print(_searchResultSnapshot);
+      // print("your value is le bhai $value");
+      // print(_searchResultSnapshot.docs.length);
 
       setState(() {
         isLoading = false;
-        haveUserSearched = true;
+        // haveUserSearched = true;
       });
     });
   }
 
-  Widget searchList() {
-    return haveUserSearched
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: _searchResultSnapshot.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return SearchTile(
-                _searchResultSnapshot.docs[index]["name"],
-                _searchResultSnapshot.docs[index]["email"],
-              );
-            },
-          )
-        : Container();
-  }
+  // Widget searchList() {
+  //   return haveUserSearched
+  //       ? ListView.builder(
+  //           shrinkWrap: true,
+  //           itemCount: _searchResultSnapshot.docs.length,
+  //           itemBuilder: (BuildContext context, int index) {
+  //             return SingleChildScrollView(
+  //               child: SearchTile(
+  //                 _searchResultSnapshot.docs[index]["name"],
+  //                 _searchResultSnapshot.docs[index]["email"],
+  //               ),
+  //             );
+  //           },
+  //         )
+  //       : Container();
+  // }
 
   createChatroomAndStartConversation(String userName) {
-    print("${Constants.myName}");
+    // print("${Constants.myName}");
     // banda khud ko messeage send nahi kar paye
     if (userName != Constants.myName) {
       String chatRoomId = getChatRoomId(Constants.myName!, userName);
@@ -79,13 +82,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       );
     } else {
-      print("you cann't send message to yourself");
+      // print("you cann't send message to yourself");
     }
   }
 
   Widget SearchTile(String userName, String userEmail) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 24,
         vertical: 18,
       ),
@@ -95,33 +98,33 @@ class _SearchScreenState extends State<SearchScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userName!,
+                userName,
                 style: simpleTextStyle(),
               ),
               Text(
-                userEmail!,
+                userEmail,
                 style: simpleTextStyle(),
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           // use mainaxis accordingly  space
           GestureDetector(
             onTap: () {
               createChatroomAndStartConversation(userName);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 245, 152, 2),
+                borderRadius: BorderRadius.circular(30),
               ),
               child: Text(
                 'Message',
                 style: simpleTextStyle(),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 245, 152, 2),
-                borderRadius: BorderRadius.circular(30),
               ),
             ),
           ),
@@ -150,63 +153,97 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: appBarMain(context) as PreferredSizeWidget,
       body: isLoading
-          ? Container(
-              child: Center(child: CircularProgressIndicator()),
-            )
-          : Container(
-              child: Column(
-                children: [
-                  Container(
-                    color: Color(0x54FFFFFF),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Search username...',
-                              hintStyle: TextStyle(color: Colors.black45),
-                              border: InputBorder.none,
-                            ),
-                          ),
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+            children: [
+              Container(
+                color: const Color(0x54FFFFFF),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            haveUserSearched = true;
+                          });
+                        },
+                        style: const TextStyle(
+                          color: Colors.black,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            initiateSearch();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(
-                              15,
-                            ),
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              gradient: RadialGradient(colors: [
-                                const Color(0x36FFFFFF),
-                                const Color(0x0FFFFFFF),
-                              ]),
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Image.asset(
-                              'assets/images/search_white.png',
-                              color: Colors.black,
-                            ),
-                          ),
+                        decoration: const InputDecoration(
+                          hintText: 'Search username...',
+                          hintStyle: TextStyle(color: Colors.black45),
+                          border: InputBorder.none,
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  searchList(),
-                ],
+                    GestureDetector(
+                      onTap: () {
+                        // initiateSearch();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(
+                          15,
+                        ),
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          gradient: const RadialGradient(colors: [
+                            Color(0x36FFFFFF),
+                            Color(0x0FFFFFFF),
+                          ]),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Image.asset(
+                          'assets/images/search_white.png',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              Expanded(
+                  child: (haveUserSearched)
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _searchResultSnapshot.docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            String name =
+                                _searchResultSnapshot.docs[index]["name"];
+                            if (name.toLowerCase().contains(
+                                _searchController.text.toLowerCase())) {
+                              return SingleChildScrollView(
+                                child: SearchTile(
+                                  _searchResultSnapshot.docs[index]["name"],
+                                  _searchResultSnapshot.docs[index]
+                                      ["email"],
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _searchResultSnapshot.docs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return SingleChildScrollView(
+                              child: SearchTile(
+                                _searchResultSnapshot.docs[index]["name"],
+                                _searchResultSnapshot.docs[index]["email"],
+                              ),
+                            );
+                          },
+                        )),
+            ],
+          ),
     );
   }
 }

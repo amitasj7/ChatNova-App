@@ -3,10 +3,8 @@ import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/Database.dart';
 import 'package:chat_app/services/auth.dart';
 import 'package:chat_app/services/google_sign_up.dart';
-import 'package:chat_app/view/account_details.dart';
 import 'package:chat_app/view/chatRoomScreen.dart';
 
-import 'package:chat_app/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,7 @@ import 'package:provider/provider.dart';
 class SignUPScreen extends StatefulWidget {
   final Function? toggle;
 
-  SignUPScreen({required this.toggle});
+  const SignUPScreen({super.key, required this.toggle});
 
   @override
   State<SignUPScreen> createState() => _SignUPScreenState();
@@ -25,9 +23,8 @@ class _SignUPScreenState extends State<SignUPScreen> {
   var emailController = TextEditingController();
   var passController = TextEditingController();
 
-  HelperFunctions _helperFunctions = HelperFunctions();
-  DatabaseMethods _databaseMethods = DatabaseMethods();
-  AuthMethods _authMethods = AuthMethods();
+  final DatabaseMethods _databaseMethods = DatabaseMethods();
+  final AuthMethods _authMethods = AuthMethods();
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   // kisi variable ko final and var dono se ek sath declare nahi kar skte
@@ -50,7 +47,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
           .signUpWithEmailAndPassword(
               emailController.text.toString(), passController.text.toString(),context)
           .then((value) {
-        print("${value!.userId}");
+        // print("${value!.userId}");
 
         _databaseMethods.uploadUserInfo(userInfoMap,context);
         HelperFunctions.saveUserLoggedInSharedPreference(true);
@@ -58,7 +55,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatRoom(),
+            builder: (context) => const ChatRoom(),
           ),
         );
       });
@@ -69,11 +66,9 @@ class _SignUPScreenState extends State<SignUPScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? Container(
-              child: const Center(
-                child: CircularProgressIndicator(color: Colors.orange),
-              ),
-            )
+          ? const Center(
+            child: CircularProgressIndicator(color: Colors.orange),
+          )
           : Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -88,14 +83,14 @@ class _SignUPScreenState extends State<SignUPScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  Container(
+                  SizedBox(
                     // color: Colors.teal,
                     width: MediaQuery.of(context).size.width * 0.30,
 
                     child: Image.asset("assets/images/chatnova_black.png"),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
                     child: Column(
                       children: [
                         Text(
@@ -111,7 +106,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                   ),
                   Expanded(
                     child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Colors.white54,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(60),
@@ -134,7 +129,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         // color: Colors.teal,
                                         color: Colors.white54,
                                         borderRadius: BorderRadius.circular(12),
-                                        boxShadow: [
+                                        boxShadow: const [
                                           BoxShadow(
                                             color:
                                                 Color.fromRGBO(225, 95, 27, 3),
@@ -147,7 +142,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                       child: Column(
                                         children: [
                                           Container(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   vertical: 10),
                                               decoration: BoxDecoration(
                                                   border: Border(
@@ -159,7 +154,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                 cursorColor:
                                                     Colors.orange.shade900,
                                                 decoration: InputDecoration(
-                                                  prefixIcon: Container(
+                                                  prefixIcon: SizedBox(
                                                       height: 5,
                                                       width: 5,
                                                       // color: Colors.red,
@@ -170,14 +165,14 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                             .orange.shade700,
                                                       ))),
                                                   hintText: "Username",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                       color: Colors.grey),
                                                   border: InputBorder.none,
                                                 ),
                                                 //  textAlign: TextAlign.center,
                                               )),
                                           Container(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   vertical: 10),
                                               decoration: BoxDecoration(
                                                   border: Border(
@@ -189,7 +184,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                 cursorColor:
                                                     Colors.orange.shade900,
                                                 decoration: InputDecoration(
-                                                  prefixIcon: Container(
+                                                  prefixIcon: SizedBox(
                                                       height: 5,
                                                       width: 5,
                                                       // color: Colors.red,
@@ -202,14 +197,14 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                       ))),
                                                   suffixText: "@gmail.com  ",
                                                   hintText: "Email",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                       color: Colors.grey),
                                                   border: InputBorder.none,
                                                 ),
                                                 //  textAlign: TextAlign.center,
                                               )),
                                           Container(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 vertical: 10),
                                             decoration: BoxDecoration(
                                                 border: Border(
@@ -232,7 +227,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                 cursorColor:
                                                     Colors.orange.shade900,
                                                 decoration: InputDecoration(
-                                                  suffixIcon: Container(
+                                                  suffixIcon: SizedBox(
                                                     width: 8,
                                                     // height: 2,
                                                     // color: Colors.teal,
@@ -258,7 +253,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  prefixIcon: Container(
+                                                  prefixIcon: SizedBox(
                                                       height: 5,
                                                       width: 5,
                                                       // color: Colors.red,
@@ -269,7 +264,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                                             .orange.shade700,
                                                       ))),
                                                   hintText: "Password",
-                                                  hintStyle: TextStyle(
+                                                  hintStyle: const TextStyle(
                                                       color: Colors.grey),
                                                   border: InputBorder.none,
                                                 ),
@@ -281,7 +276,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         ],
                                       ),
                                     )),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                                 GestureDetector(
                                   onTap: () => widget.toggle!(),
                                   child: Row(
@@ -290,26 +285,26 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                       Text("Already have an account? ",
                                           style: TextStyle(
                                               color: Colors.grey.shade700)),
-                                      Text("Login",
+                                      const Text("Login",
                                           style: TextStyle(
                                               fontSize: 15,
                                               color: Colors.black)),
                                     ],
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                const SizedBox(height: 30),
                                 GestureDetector(
                                   onTap: () => signMeUP(),
                                   child: Container(
                                     height: 50,
-                                    margin: EdgeInsets.symmetric(
+                                    margin: const EdgeInsets.symmetric(
                                       horizontal: 50,
                                     ),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(50),
                                       color: Colors.orange.shade900,
                                     ),
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         "Sign UP",
                                         style: TextStyle(
@@ -320,13 +315,13 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 50,
                                 ),
                                 Text("Continue with social media",
                                     style:
                                         TextStyle(color: Colors.grey.shade700)),
-                                SizedBox(
+                                const SizedBox(
                                   height: 30,
                                 ),
                                 Row(
@@ -339,7 +334,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                           borderRadius:
                                               BorderRadius.circular(50),
                                         ),
-                                        child: Center(
+                                        child: const Center(
                                           child: FaIcon(
                                             FontAwesomeIcons.facebook,
                                             size: 40,
@@ -348,7 +343,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 7,
                                     ),
                                     Expanded(
@@ -356,11 +351,11 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         onTap: () {
                                           // return GoogleSignInProvider()
                                           //     .signInWithGoogle();
-                                          final _provider =
+                                          final provider =
                                               Provider.of<GoogleSignInProvider>(
                                                   context,
                                                   listen: false);
-                                          _provider.googleLogin(context);
+                                          provider.googleLogin(context);
 
                                           
                                         },
@@ -377,7 +372,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 7,
                                     ),
                                     Expanded(
@@ -387,7 +382,7 @@ class _SignUPScreenState extends State<SignUPScreen> {
                                         color: Colors.black,
                                         borderRadius: BorderRadius.circular(50),
                                       ),
-                                      child: Center(
+                                      child: const Center(
                                         child: FaIcon(
                                           FontAwesomeIcons.github,
                                           size: 40,

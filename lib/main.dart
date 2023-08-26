@@ -2,10 +2,8 @@ import 'package:chat_app/Model/provider.dart';
 import 'package:chat_app/helper/authenticate.dart';
 import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/google_sign_up.dart';
-import 'package:chat_app/view/account_details.dart';
-import 'package:chat_app/view/chatRoomScreen.dart';
 
-import 'package:chat_app/view/homepage.dart';
+import 'package:chat_app/view/chatRoomScreen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +36,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> getLoggedInState() async {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value) {
-      print("your value ********************* $value");
+      // print("your value ********************* $value");
       setState(() {
         userIsLoggedIn = value;
       });
@@ -71,17 +69,14 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'overpass',
             primarySwatch: Colors.orange,
             visualDensity: VisualDensity.adaptivePlatformDensity,
-            scaffoldBackgroundColor: Color.fromARGB(255, 237, 180, 99),
-            primaryColor: Color.fromARGB(255, 253, 182, 96),
+            scaffoldBackgroundColor: const Color.fromARGB(255, 237, 180, 99),
+            primaryColor: const Color.fromARGB(255, 253, 182, 96),
           ),
           home: (userIsLoggedIn != null)
               ? userIsLoggedIn!
-                  ? ChatRoom()
-                  : Authenticate()
-              : Container(
-                  child: Center(child: Authenticate()),
-                ),
-         
+                  ? const ChatRoom()
+                  : const Authenticate()
+              : const Center(child: Authenticate()),
         );
       }),
     );

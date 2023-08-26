@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethods {
   getUserbyUsername(String username) async {
-    print("in getuserbyusername");
+    // print("in getuserbyusername");
     return await FirebaseFirestore.instance
         .collection("users")
-        .where("name", isEqualTo: username)
+        // .where("name", isEqualTo: username)
         .get();
   }
 
@@ -16,19 +16,21 @@ class DatabaseMethods {
         .collection("users")
         .where("email", isEqualTo: userEmail)
         .get()
+        // ignore: body_might_complete_normally_catch_error
         .catchError((e) {
-      print(e.toString());
+      // print(e.toString());
     });
   }
 
   uploadUserInfo(userMap, context) {
+    // ignore: body_might_complete_normally_catch_error
     FirebaseFirestore.instance.collection("users").add(userMap).catchError((e) {
       openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     });
   }
 
@@ -38,7 +40,7 @@ class DatabaseMethods {
         .doc(chatRoomid)
         .set(chatRoomMap)
         .catchError((e) {
-      print(e.toString());
+      // print(e.toString());
     });
   }
 
@@ -48,8 +50,9 @@ class DatabaseMethods {
         .doc(chatRoomId)
         .collection('chats')
         .add(messageMap)
+        // ignore: body_might_complete_normally_catch_error
         .catchError((e) {
-      print(e.toString());
+      // print(e.toString());
     });
   }
 

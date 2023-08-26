@@ -2,62 +2,42 @@ import 'package:chat_app/helper/constant.dart';
 import 'package:chat_app/services/Database.dart';
 import 'package:chat_app/view/conversation_screen.dart';
 import 'package:chat_app/widgets/widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class SearchUserlistScreen extends StatefulWidget {
+  const SearchUserlistScreen({super.key});
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<SearchUserlistScreen> createState() => _SearchUserlistScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  var _searchController = TextEditingController();
-  DatabaseMethods _databaseMethods = DatabaseMethods();
+class _SearchUserlistScreenState extends State<SearchUserlistScreen> {
+  final _searchController = TextEditingController();
+  final DatabaseMethods _databaseMethods = DatabaseMethods();
 
-  late QuerySnapshot _searchResultSnapshot;
+  Stream? _searchStream;
   bool isLoading = false;
   bool haveUserSearched = false;
 
-  initiateSearch() async {
-    if (_searchController.text.isNotEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-    }
 
+  initiateSearch() async {
     await _databaseMethods
         .getUserbyUsername(_searchController.text.toString())
         .then((value) {
-      print("hello baby");
-      _searchResultSnapshot = value;
-      print(_searchResultSnapshot);
+      // print("hello baby");
 
+      // print(_searchStream);
       setState(() {
-        isLoading = false;
-        haveUserSearched = true;
+        _searchStream = value;
       });
+    }).catcherror((error) {
+      // print("your stream error is : $error");
     });
   }
 
-  Widget searchList() {
-    return haveUserSearched
-        ? ListView.builder(
-            shrinkWrap: true,
-            itemCount: _searchResultSnapshot.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return SearchTile(
-                _searchResultSnapshot.docs[index]["name"],
-                _searchResultSnapshot.docs[index]["email"],
-              );
-            },
-          )
-        : Container();
-  }
-
   createChatroomAndStartConversation(String userName) {
-    print("${Constants.myName}");
+    // print("${Constants.myName}");
     // banda khud ko messeage send nahi kar paye
     if (userName != Constants.myName) {
       String chatRoomId = getChatRoomId(Constants.myName!, userName);
@@ -79,13 +59,14 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       );
     } else {
-      print("you cann't send message to yourself");
+      // print("you cann't send message to yourself");
     }
   }
 
+  // ignore: non_constant_identifier_names
   Widget SearchTile(String userName, String userEmail) {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 24,
         vertical: 18,
       ),
@@ -95,33 +76,33 @@ class _SearchScreenState extends State<SearchScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userName!,
+                userName,
                 style: simpleTextStyle(),
               ),
               Text(
-                userEmail!,
+                userEmail,
                 style: simpleTextStyle(),
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           // use mainaxis accordingly  space
           GestureDetector(
             onTap: () {
               createChatroomAndStartConversation(userName);
             },
             child: Container(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 14,
                 vertical: 10,
+              ),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 245, 152, 2),
+                borderRadius: BorderRadius.circular(30),
               ),
               child: Text(
                 'Message',
                 style: simpleTextStyle(),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 245, 152, 2),
-                borderRadius: BorderRadius.circular(30),
               ),
             ),
           ),
@@ -150,46 +131,102 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: appBarMain(context) as PreferredSizeWidget,
       body: isLoading
-          ? Container(
-              child: Center(child: CircularProgressIndicator()),
-            )
-          : Container(
-              child: Column(
-                children: [
-                  Container(
-                    color: Color(0x54FFFFFF),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 16,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (value){  
-                              setState(() {
-                                
-                              });
-                            },
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'Search username...',
-                              hintStyle: TextStyle(color: Colors.black45),
-                              border: InputBorder.none,
-                            ),
-                          ),
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+            children: [
+              Container(
+                color: const Color(0x54FFFFFF),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 16,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        style: const TextStyle(
+                          color: Colors.black,
                         ),
-                      
-                      ],
+                        decoration: const InputDecoration(
+                          hintText: 'Search username...',
+                          hintStyle: TextStyle(color: Colors.black45),
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
-                  ),
-                  
-                ],
+                  ],
+                ),
               ),
-            ),
+              Expanded(
+                  child: StreamBuilder(
+                stream: _searchStream,
+                builder: (BuildContext context, snapshot) {
+                  // if snapshot data nahi rakhta hai to shimmer effect show
+                  if (!snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: 10,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey.shade700,
+                          highlightColor: Colors.grey.shade100,
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Container(
+                                  height: 10,
+                                  width: 90,
+                                  color: Colors.white,
+                                ),
+                                subtitle: Container(
+                                  height: 10,
+                                  width: 90,
+                                  color: Colors.white,
+                                ),
+                                leading: Container(
+                                  height: 50,
+                                  width: 50,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        String name = snapshot.data[index]["name"];
+
+                        // for filter countries , we use this approch ->
+
+                        if (_searchController.text.isEmpty) {
+                          return SearchTile(
+                            snapshot.data[index]["name"],
+                            snapshot.data[index]["email"],
+                          );
+                        } else if (name.toLowerCase().contains(
+                            _searchController.text.toLowerCase())) {
+                          return SearchTile(
+                            snapshot.data[index]["name"],
+                            snapshot.data[index]["email"],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      },
+                    );
+                  }
+                },
+              )),
+            ],
+          ),
     );
   }
 }

@@ -17,34 +17,34 @@ InputDecoration textFieldInputDecoration(String _hintText,) {
   return InputDecoration(
     
     hintText: _hintText,
-    hintStyle: TextStyle(
+    hintStyle: const TextStyle(
       color: Colors.black45,
     ),
-    focusedBorder: UnderlineInputBorder(
+    focusedBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black,
       ),
     ),
-    enabledBorder: UnderlineInputBorder(
+    enabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black45,
       ),
     ),
-    disabledBorder: UnderlineInputBorder(
+    disabledBorder: const UnderlineInputBorder(
       borderSide: BorderSide(color: Colors.red),
     ),
   );
 }
 
 TextStyle simpleTextStyle() {
-  return TextStyle(
+  return const TextStyle(
     color: Colors.black,
     fontSize: 16,
   );
 }
 
 TextStyle mediumTextStyle() {
-  return TextStyle(
+  return const TextStyle(
     color: Colors.black,
     fontSize: 18,
   );

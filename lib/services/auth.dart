@@ -17,17 +17,18 @@ class AuthMethods {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User? _firebaseUser = result.user;
-      print("aaja bsdk");
+      // print("aaja bsdk");
       return _userFromFirebaseUser(_firebaseUser);
     } catch (e) {
-      print("hey bsdk");
+      // print("hey bsdk");
       openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     }
+    return null;
   }
 
   Future<User1?> signUpWithEmailAndPassword(
@@ -41,10 +42,11 @@ class AuthMethods {
       openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     }
+    return null;
   }
 
   Future<void> resetPass(String email,context) async {
@@ -54,9 +56,9 @@ class AuthMethods {
        openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     }
   }
 
@@ -67,9 +69,9 @@ class AuthMethods {
        openSnackBar(
         context,
         e.toString(),
-        Color.fromARGB(255, 255, 210, 150),
+        const Color.fromARGB(255, 255, 210, 150),
       );
-      print(e.toString());
+      // print(e.toString());
     }
   }
 }
