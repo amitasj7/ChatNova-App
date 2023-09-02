@@ -2,12 +2,12 @@
 
 ChatApp is your go-to platform for real-time messaging. Connect with friends, family, and colleagues instantly, no matter where they are.Send messages even when you're offline. ChatApp will deliver them as soon as you're back online, ensuring you never miss out on important updates.
   
-  1. Firbase , Firestore database , Firebase Storage
+  1. Firbase, Firestore database, Authentication
   2. StreamBuilder concept
   3. Google SignUP 
   4. Forgot Password concept that send a reset link on corresponding Email
   5. Search users concept and Filter them
-  6. chat upload , Images Upload 
+  6. chat upload, Images Upload 
   
 # Screenshot : 
 
