@@ -21,11 +21,12 @@ class _SearchScreenState extends State<SearchScreen> {
   bool haveUserSearched = false;
 
   initiateSearch() async {
-    // if (_searchController.text.isNotEmpty) {
-    //   setState(() {
-    //     isLoading = true;
-    //   });
-    // }
+   // intially searchController me koi value nahi hogi to error ko avoid krne ke liye -> 
+    if (_searchController.text.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
 
     await _databaseMethods
         .getUserbyUsername(_searchController.text.toString())
@@ -41,23 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
       });
     });
   }
-
-  // Widget searchList() {
-  //   return haveUserSearched
-  //       ? ListView.builder(
-  //           shrinkWrap: true,
-  //           itemCount: _searchResultSnapshot.docs.length,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             return SingleChildScrollView(
-  //               child: SearchTile(
-  //                 _searchResultSnapshot.docs[index]["name"],
-  //                 _searchResultSnapshot.docs[index]["email"],
-  //               ),
-  //             );
-  //           },
-  //         )
-  //       : Container();
-  // }
 
   createChatroomAndStartConversation(String userName) {
     // print("${Constants.myName}");
@@ -152,63 +136,76 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarMain(context) as PreferredSizeWidget,
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-            children: [
-              Container(
-                color: const Color(0x54FFFFFF),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            haveUserSearched = true;
-                          });
-                        },
-                        style: const TextStyle(
-                          color: Colors.black,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: 'Search username...',
-                          hintStyle: TextStyle(color: Colors.black45),
-                          border: InputBorder.none,
-                        ),
-                      ),
+      body: Column(
+        children: [
+          Container(
+            color: const Color(0x54FFFFFF),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+              vertical: 16,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        haveUserSearched = true;
+                      });
+                    },
+                    style: const TextStyle(
+                      color: Colors.black,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        // initiateSearch();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(
-                          15,
-                        ),
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          gradient: const RadialGradient(colors: [
-                            Color(0x36FFFFFF),
-                            Color(0x0FFFFFFF),
-                          ]),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Image.asset(
-                          'assets/images/search_white.png',
-                          color: Colors.black,
-                        ),
-                      ),
+                    decoration: const InputDecoration(
+                      hintText: 'Search username...',
+                      hintStyle: TextStyle(color: Colors.black45),
+                      border: InputBorder.none,
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Expanded(
+                GestureDetector(
+                  onTap: () {
+                    // initiateSearch();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(
+                      15,
+                    ),
+                    height: 45,
+                    width: 45,
+                    decoration: BoxDecoration(
+                      gradient: const RadialGradient(colors: [
+                        Color(0x36FFFFFF),
+                        Color(0x0FFFFFFF),
+                      ]),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Image.asset(
+                      'assets/images/search_white.png',
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // (_searchResultSnapshot.docs.length == 0)
+          //     ? Center(
+          //         child: CircularProgressIndicator(
+          //         color: Colors.orange.shade600,
+          //       ))
+          //     :
+          (isLoading)
+              ? Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.orange.shade700,
+                      color: Colors.amber.shade200,
+                    ),
+                  ),
+                )
+              : Expanded(
                   child: (haveUserSearched)
                       ? ListView.builder(
                           shrinkWrap: true,
@@ -221,8 +218,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               return SingleChildScrollView(
                                 child: SearchTile(
                                   _searchResultSnapshot.docs[index]["name"],
-                                  _searchResultSnapshot.docs[index]
-                                      ["email"],
+                                  _searchResultSnapshot.docs[index]["email"],
                                 ),
                               );
                             } else {
@@ -242,58 +238,10 @@ class _SearchScreenState extends State<SearchScreen> {
                             );
                           },
                         )),
-            ],
-          ),
+        ],
+      ),
     );
   }
 }
 
-// class SearchTile extends StatelessWidget {
-//   late final String? userName;
-//   late final String? userEmail;
-//
-//   SearchTile({this.userName, this.userEmail});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       padding: EdgeInsets.symmetric(
-//         horizontal: 24,
-//         vertical: 18,
-//       ),
-//       child: Row(
-//         children: [
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 userName!,
-//                 style: simpleTextStyle(),
-//               ),
-//               Text(
-//                 userEmail!,
-//                 style: simpleTextStyle(),
-//               ),
-//             ],
-//           ),
-//           Spacer(),
-//           // use mainaxis accordingly  space
-//           Container(
-//             padding: EdgeInsets.symmetric(
-//               horizontal: 14,
-//               vertical: 10,
-//             ),
-//             child: Text(
-//               'Message',
-//               style: simpleTextStyle(),
-//             ),
-//             decoration: BoxDecoration(
-//               color: Colors.blue.shade400,
-//               borderRadius: BorderRadius.circular(30),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+

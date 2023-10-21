@@ -1,4 +1,5 @@
 import 'package:chat_app/Model/provider.dart';
+import 'package:chat_app/doubt.dart';
 import 'package:chat_app/helper/authenticate.dart';
 import 'package:chat_app/helper/helperfunction.dart';
 import 'package:chat_app/services/google_sign_up.dart';
@@ -57,26 +58,22 @@ class _MyAppState extends State<MyApp> {
           title: 'ChatNova',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
+          
             fontFamily: 'overpass',
             primarySwatch: Colors.orange,
             visualDensity: VisualDensity.adaptivePlatformDensity,
             scaffoldBackgroundColor: const Color.fromARGB(255, 237, 180, 99),
             primaryColor: const Color.fromARGB(255, 253, 182, 96),
           ),
+
+
           home: (userIsLoggedIn != null)
               ? userIsLoggedIn!
                   ? const ChatRoom()
                   : const Authenticate()
               : const Center(child: Authenticate()),
+
+          // home: Doubt()
         );
       }),
     );

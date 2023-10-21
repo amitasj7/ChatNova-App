@@ -48,7 +48,7 @@ dependencies:
   get:
   # State Management
   provider:
-  shimmer:
+ 
 
 dev_dependencies:
   flutter_test:
